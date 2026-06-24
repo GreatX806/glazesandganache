@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glazes & Ganache — Artisan Bakery, Lekki Lagos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --espresso: #1A0800;
+    --dark-choc: #2D1200;
+    --cream: #F5ECD7;
+    --cream-dim: #C8B49A;
+    --caramel: #C8956C;
+    --caramel-light: #E8B88A;
+    --pink: #D4A5C9;
+    --white: #FFFDF9;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--espresso); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 22px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(26,8,0,0.95), transparent);
+    transition: background 0.3s;
+  }
+  .nav-logo { font-family: 'Cormorant Garant', serif; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.04em; color: var(--cream); text-decoration: none; }
+  .nav-logo span { color: var(--caramel); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-dim); text-decoration: none; transition: color 0.25s; }
+  .nav-links a:hover { color: var(--caramel-light); }
+  .nav-cta { padding: 10px 24px; border: 1px solid var(--caramel); color: var(--caramel); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.25s; }
+  .nav-cta:hover { background: var(--caramel); color: var(--espresso); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 48px 100px; overflow: hidden;
+  }
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=1800&q=85&fit=crop');
+    background-size: cover; background-position: center top;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,8,0,0.97) 0%, rgba(26,8,0,0.6) 45%, rgba(26,8,0,0.25) 100%);
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--caramel);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-badge::before { content: ''; display: block; width: 32px; height: 1px; background: var(--caramel); }
+  .hero-headline {
+    font-family: 'Cormorant Garant', serif;
+    font-size: clamp(3.5rem, 9vw, 8rem); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em;
+    max-width: 900px;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-headline em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--caramel-light) 0%, var(--caramel) 50%, #A0683A 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub {
+    margin-top: 24px; font-size: 1rem; line-height: 1.7; color: var(--cream-dim); max-width: 460px;
+    opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+  }
+  .hero-actions {
+    margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.9s forwards;
+  }
+  .hero-stats {
+    position: absolute; right: 48px; bottom: 100px; z-index: 2;
+    display: flex; flex-direction: column; gap: 28px; align-items: flex-end;
+    opacity: 0; animation: fadeIn 1s 1.3s forwards;
+  }
+  .stat-item { text-align: right; }
+  .stat-num { font-family: 'Cormorant Garant', serif; font-size: 2.8rem; font-weight: 300; color: var(--caramel-light); line-height: 1; }
+  .stat-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-dim); margin-top: 3px; }
+  .hero-scroll {
+    position: absolute; bottom: 36px; left: 48px; z-index: 2;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream-dim);
+    opacity: 0; animation: fadeIn 1s 1.6s forwards;
+  }
+  .hero-scroll::after { content: ''; display: block; width: 1px; height: 40px; background: linear-gradient(to bottom, var(--caramel), transparent); animation: scrollPulse 2s infinite; }
+  @keyframes scrollPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* BUTTONS */
+  .btn-primary { padding: 16px 40px; background: var(--caramel); color: var(--espresso); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s; border: none; cursor: pointer; display: inline-block; }
+  .btn-primary:hover { background: var(--caramel-light); transform: translateY(-2px); }
+  .btn-ghost { padding: 16px 40px; border: 1px solid rgba(245,236,215,0.3); color: var(--cream); font-size: 0.78rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--cream); background: rgba(245,236,215,0.05); }
+
+  /* MARQUEE */
+  .marquee-strip { border-top: 1px solid rgba(200,149,108,0.2); border-bottom: 1px solid rgba(200,149,108,0.2); padding: 18px 0; overflow: hidden; background: var(--dark-choc); }
+  .marquee-track { display: flex; gap: 48px; width: max-content; animation: marquee 30s linear infinite; }
+  .marquee-item { display: flex; align-items: center; gap: 16px; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream-dim); white-space: nowrap; }
+  .marquee-dot { color: var(--caramel); }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* SHARED */
+  .section-eyebrow { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--caramel); }
+  .section-title { font-family: 'Cormorant Garant', serif; font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 300; line-height: 1.1; letter-spacing: -0.01em; }
+  .section-title em { font-style: italic; color: var(--caramel-light); }
+
+  /* PRODUCTS */
+  .products { padding: 120px 48px; background: var(--dark-choc); }
+  .products-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; flex-wrap: wrap; gap: 24px; }
+  .products-intro { max-width: 420px; }
+  .products-intro p { margin-top: 16px; font-size: 0.95rem; line-height: 1.8; color: var(--cream-dim); }
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .product-card { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 3/4; }
+  .product-card:first-child { grid-row: span 2; aspect-ratio: auto; }
+  .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; display: block; }
+  .product-card:hover .product-img { transform: scale(1.07); }
+  .product-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,8,0,0.95) 0%, rgba(26,8,0,0.3) 55%, transparent 100%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 28px 24px;
+  }
+  .product-category { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 6px; }
+  .product-name { font-family: 'Cormorant Garant', serif; font-size: 1.5rem; font-weight: 600; line-height: 1.2; }
+  .product-desc { font-size: 0.8rem; color: var(--cream-dim); margin-top: 6px; line-height: 1.6; opacity: 0; transform: translateY(8px); transition: all 0.4s ease; }
+  .product-card:hover .product-desc { opacity: 1; transform: translateY(0); }
+  .product-price { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .price-tag { font-family: 'Cormorant Garant', serif; font-size: 1.2rem; font-weight: 600; color: var(--caramel-light); }
+  .product-order { padding: 8px 18px; background: var(--caramel); color: var(--espresso); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border: none; border-radius: 2px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+  .product-order:hover { background: var(--caramel-light); }
+
+  /* ABOUT */
+  .about-section { padding: 120px 48px; }
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-visual { position: relative; }
+  .about-img-main { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 4px; display: block; }
+  .about-img-accent {
+    position: absolute; bottom: -28px; right: -28px;
+    width: 55%; aspect-ratio: 1; object-fit: cover;
+    border-radius: 4px; border: 4px solid var(--espresso); display: block;
+  }
+  .about-body { font-size: 0.95rem; line-height: 1.9; color: var(--cream-dim); margin: 24px 0 36px; }
+  .about-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+  .pillar { padding: 20px; border: 1px solid rgba(200,149,108,0.15); border-radius: 4px; transition: border-color 0.3s; }
+  .pillar:hover { border-color: rgba(200,149,108,0.4); }
+  .pillar-icon { font-size: 1.3rem; margin-bottom: 8px; }
+  .pillar-name { font-family: 'Cormorant Garant', serif; font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+  .pillar-desc { font-size: 0.78rem; color: var(--cream-dim); line-height: 1.6; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 120px 48px; background: var(--dark-choc); text-align: center; }
+  .testimonials .section-eyebrow { justify-content: center; }
+  .testimonials .section-eyebrow::before { display: none; }
+  .rating-display { margin: 40px auto; display: flex; align-items: center; gap: 16px; justify-content: center; }
+  .rating-num { font-family: 'Cormorant Garant', serif; font-size: 5rem; font-weight: 300; color: var(--caramel-light); line-height: 1; }
+  .rating-stars { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .stars-row { color: var(--caramel); font-size: 1.3rem; letter-spacing: 2px; }
+  .reviews-count { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--cream-dim); }
+  .testimonials-track-wrap { overflow: hidden; margin: 56px -48px 0; padding: 0 48px; }
+  .testimonials-track { display: flex; gap: 24px; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .testimonial-card { flex: 0 0 calc(33.333% - 16px); background: var(--espresso); border: 1px solid rgba(200,149,108,0.12); border-radius: 4px; padding: 36px 32px; text-align: left; transition: border-color 0.3s; }
+  .testimonial-card:hover { border-color: rgba(200,149,108,0.3); }
+  .t-stars { color: var(--caramel); font-size: 0.85rem; margin-bottom: 16px; }
+  .t-text { font-family: 'Cormorant Garant', serif; font-size: 1.15rem; font-weight: 300; font-style: italic; line-height: 1.7; color: var(--cream); margin-bottom: 24px; }
+  .t-author { display: flex; align-items: center; gap: 12px; }
+  .t-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+  .t-avatar-fallback { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--caramel), var(--pink)); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 500; color: var(--espresso); font-family: 'DM Sans', sans-serif; }
+  .t-name { font-size: 0.85rem; font-weight: 500; }
+  .t-tag { font-size: 0.65rem; letter-spacing: 0.08em; color: var(--cream-dim); text-transform: uppercase; }
+  .testimonials-nav { margin-top: 48px; display: flex; gap: 12px; justify-content: center; }
+  .t-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(200,149,108,0.3); cursor: pointer; border: none; transition: all 0.3s; }
+  .t-dot.active { background: var(--caramel); width: 24px; border-radius: 3px; }
+
+  /* GALLERY */
+  .gallery-section { padding: 120px 48px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 4px; margin-top: 48px; }
+  .gallery-cell { overflow: hidden; border-radius: 2px; cursor: pointer; position: relative; }
+  .gallery-cell.tall { grid-row: span 2; }
+  .gallery-cell.wide { grid-column: span 2; }
+  .gallery-cell img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+  .gallery-cell:hover img { transform: scale(1.06); }
+  .gallery-label {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    background: linear-gradient(to top, rgba(26,8,0,0.85), transparent);
+    color: var(--cream-dim); opacity: 0; transition: opacity 0.3s;
+  }
+  .gallery-cell:hover .gallery-label { opacity: 1; }
+
+  /* CONTACT */
+  .contact-section { padding: 120px 48px; background: var(--dark-choc); }
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact-info .section-title { margin-bottom: 40px; }
+  .contact-block { padding: 28px 0; border-bottom: 1px solid rgba(200,149,108,0.15); }
+  .contact-block:first-of-type { border-top: 1px solid rgba(200,149,108,0.15); }
+  .contact-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 8px; }
+  .contact-value { font-family: 'Cormorant Garant', serif; font-size: 1.15rem; line-height: 1.6; }
+  .contact-actions { margin-top: 36px; display: flex; flex-direction: column; gap: 12px; }
+  .btn-wa { display: flex; align-items: center; gap: 12px; padding: 16px 28px; background: #25D366; color: #fff; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s; width: fit-content; }
+  .btn-wa:hover { background: #1aa34a; transform: translateY(-2px); }
+  .contact-form { display: flex; flex-direction: column; gap: 14px; }
+  .contact-form input, .contact-form textarea, .contact-form select { background: rgba(245,236,215,0.05); border: 1px solid rgba(200,149,108,0.2); border-radius: 2px; padding: 15px 20px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.3s; outline: none; }
+  .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { border-color: var(--caramel); }
+  .contact-form textarea { min-height: 110px; resize: vertical; }
+  .contact-form select option { background: var(--dark-choc); }
+
+  /* FOOTER */
+  footer { padding: 64px 48px 40px; border-top: 1px solid rgba(200,149,108,0.15); }
+  .footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 48px; flex-wrap: wrap; gap: 40px; }
+  .footer-brand { max-width: 280px; }
+  .footer-logo { font-family: 'Cormorant Garant', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 0.04em; color: var(--cream); margin-bottom: 14px; }
+  .footer-logo span { color: var(--caramel); }
+  .footer-tagline { font-size: 0.82rem; line-height: 1.7; color: var(--cream-dim); }
+  .footer-links-group h4 { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 18px; }
+  .footer-links-group ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .footer-links-group a { font-size: 0.85rem; color: var(--cream-dim); text-decoration: none; transition: color 0.2s; }
+  .footer-links-group a:hover { color: var(--caramel-light); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 32px; border-top: 1px solid rgba(200,149,108,0.1); flex-wrap: wrap; gap: 16px; }
+  .footer-copy { font-size: 0.72rem; color: var(--cream-dim); }
+  .footer-socials { display: flex; gap: 20px; }
+  .footer-socials a { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream-dim); text-decoration: none; transition: color 0.2s; }
+  .footer-socials a:hover { color: var(--caramel); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .rd1 { transition-delay: 0.1s; }
+  .rd2 { transition-delay: 0.2s; }
+  .rd3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 18px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 20px 80px; }
+    .hero-stats { display: none; }
+    .products { padding: 80px 20px; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .product-card:first-child { grid-row: span 1; aspect-ratio: 3/4; }
+    .about-section { padding: 80px 20px; }
+    .about { grid-template-columns: 1fr; gap: 48px; }
+    .about-img-main { aspect-ratio: 16/9; }
+    .about-img-accent { display: none; }
+    .testimonials { padding: 80px 20px; }
+    .testimonial-card { flex: 0 0 100%; }
+    .gallery-section { padding: 80px 20px; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
+    .gallery-cell.wide { grid-column: span 1; }
+    .contact-section { padding: 80px 20px; }
+    .contact { grid-template-columns: 1fr; gap: 48px; }
+    footer { padding: 48px 20px 32px; }
+    .footer-top { flex-direction: column; }
+    .btn-ghost { padding: 14px 24px; }
+    .btn-primary { padding: 14px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Glazes <span>&</span> Ganache</a>
+  <ul class="nav-links">
+    <li><a href="#products">Menu</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Visit</a></li>
+  </ul>
+  <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20place%20an%20order" target="_blank" class="nav-cta">Order Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Lekki Phase 1, Lagos · Artisan Bakery & Café</div>
+    <h1 class="hero-headline">
+      Handcrafted<br>
+      <em>Pastries.</em><br>
+      Luxury Cakes.
+    </h1>
+    <p class="hero-sub">Lagos' favorite destination for artisan cinnamon rolls, signature bubble tea, premium celebration cakes, and handcrafted desserts — made fresh, every single day.</p>
+    <div class="hero-actions">
+      <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20place%20an%20order" target="_blank" class="btn-primary">Order via WhatsApp</a>
+      <a href="#products" class="btn-ghost">View Our Menu</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">4.9</div><div class="stat-label">Star Rating</div></div>
+    <div class="stat-item"><div class="stat-num">31+</div><div class="stat-label">Reviews</div></div>
+    <div class="stat-item"><div class="stat-num">Daily</div><div class="stat-label">Freshly Baked</div></div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Cinnamon Rolls</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Bubble Tea</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Luxury Cakes</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Belgian Waffles</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Artisan Bagels</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Gourmet Meat Pies</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Specialty Desserts</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Same-Day Delivery</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Cinnamon Rolls</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Bubble Tea</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Luxury Cakes</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Belgian Waffles</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Artisan Bagels</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Gourmet Meat Pies</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Specialty Desserts</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Same-Day Delivery</div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="products-header">
+    <div class="products-intro reveal">
+      <div class="section-eyebrow">Signature Menu</div>
+      <h2 class="section-title">Crafted with <em>intention</em></h2>
+      <p>Every item is made from scratch using premium ingredients — the kind of quality you can taste in every single bite.</p>
+    </div>
+    <a href="https://wa.me/2348133097788?text=Hi%2C%20please%20send%20me%20the%20full%20menu" target="_blank" class="btn-ghost reveal">Full Menu →</a>
+  </div>
+
+  <div class="products-grid">
+    <!-- Card 1: Cinnamon Rolls (tall) -->
+    <div class="product-card">
+      <img class="product-img"
+        src="https://images.unsplash.com/photo-1600348759200-5b94753c2668?w=800&q=80&fit=crop"
+        alt="Signature Cinnamon Rolls"
+        onerror="this.src='https://images.unsplash.com/photo-1585478259715-876acc5be8eb?w=800&q=80&fit=crop'">
+      <div class="product-overlay">
+        <div class="product-category">Signature</div>
+        <div class="product-name">Cinnamon Rolls</div>
+        <div class="product-desc">Soft, pillowy rolls slathered in warm cream cheese glaze. Our most-loved creation in Lagos.</div>
+        <div class="product-price">
+          <span class="price-tag">₦3,500+</span>
+          <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20order%20Cinnamon%20Rolls" target="_blank" class="product-order">Order</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Bubble Tea -->
+    <div class="product-card">
+      <img class="product-img"
+        src="https://images.unsplash.com/photo-1558857563-b371033873b8?w=800&q=80&fit=crop"
+        alt="Signature Bubble Tea"
+        onerror="this.src='https://images.unsplash.com/photo-1544145945-f90425340c7e?w=800&q=80&fit=crop'">
+      <div class="product-overlay">
+        <div class="product-category">Drinks</div>
+        <div class="product-name">Bubble Tea</div>
+        <div class="product-desc">Handcrafted signature blends with premium pearls. Refreshing and utterly indulgent.</div>
+        <div class="product-price">
+          <span class="price-tag">₦2,800+</span>
+          <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20order%20Bubble%20Tea" target="_blank" class="product-order">Order</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Celebration Cakes -->
+    <div class="product-card">
+      <img class="product-img"
+        src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80&fit=crop"
+        alt="Luxury Celebration Cakes"
+        onerror="this.src='https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=800&q=80&fit=crop'">
+      <div class="product-overlay">
+        <div class="product-category">Custom Cakes</div>
+        <div class="product-name">Celebration Cakes</div>
+        <div class="product-desc">Luxury custom-designed cakes for every occasion, tailored to your exact vision.</div>
+        <div class="product-price">
+          <span class="price-tag">₦25,000+</span>
+          <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20order%20a%20Custom%20Cake" target="_blank" class="product-order">Order</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Bagels -->
+    <div class="product-card">
+      <img class="product-img"
+        src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=800&q=80&fit=crop"
+        alt="Gourmet Artisan Bagels"
+        onerror="this.src='https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=800&q=80&fit=crop'">
+      <div class="product-overlay">
+        <div class="product-category">Artisan Breads</div>
+        <div class="product-name">Gourmet Bagels</div>
+        <div class="product-desc">Freshly baked, chewy inside, perfectly crisp outside. Classic and flavoured varieties daily.</div>
+        <div class="product-price">
+          <span class="price-tag">₦2,200+</span>
+          <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20order%20Bagels" target="_blank" class="product-order">Order</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Meat Pies -->
+    <div class="product-card">
+      <img class="product-img"
+        src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=80&fit=crop"
+        alt="Flaky Gourmet Meat Pies"
+        onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=80&fit=crop'">
+      <div class="product-overlay">
+        <div class="product-category">Savory</div>
+        <div class="product-name">Flaky Meat Pies</div>
+        <div class="product-desc">Buttery, layered pastry filled with perfectly seasoned beef. A Lagos classic, elevated.</div>
+        <div class="product-price">
+          <span class="price-tag">₦1,800+</span>
+          <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20order%20Meat%20Pies" target="_blank" class="product-order">Order</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6: Waffles -->
+    <div class="product-card">
+      <img class="product-img"
+        src="https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=800&q=80&fit=crop"
+        alt="Belgian Waffles"
+        onerror="this.src='https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80&fit=crop'">
+      <div class="product-overlay">
+        <div class="product-category">Desserts</div>
+        <div class="product-name">Belgian Waffles</div>
+        <div class="product-desc">Crisp golden waffles topped with berries, whipped cream, or salted caramel drizzle.</div>
+        <div class="product-price">
+          <span class="price-tag">₦4,500+</span>
+          <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20order%20Belgian%20Waffles" target="_blank" class="product-order">Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about">
+    <div class="about-visual reveal">
+      <img class="about-img-main"
+        src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=900&q=85&fit=crop"
+        alt="Glazes and Ganache Bakery Interior"
+        onerror="this.src='https://images.unsplash.com/photo-1509440159596-0249088772ff?w=900&q=85&fit=crop'">
+      <img class="about-img-accent"
+        src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=85&fit=crop"
+        alt="Baker crafting pastries"
+        onerror="this.style.display='none'">
+    </div>
+    <div class="about-content">
+      <div class="section-eyebrow reveal">Our Story</div>
+      <h2 class="section-title reveal">Where Passion<br>Meets <em>Pastry</em></h2>
+      <p class="about-body reveal">Glazes & Ganache crafts unforgettable bakery experiences through expertly made pastries, artisan breads, luxury cakes, and signature beverages. Every item is freshly prepared using premium ingredients and meticulous attention to detail — because you deserve more than ordinary.</p>
+      <div class="about-pillars reveal">
+        <div class="pillar">
+          <div class="pillar-icon">🌾</div>
+          <div class="pillar-name">Premium Ingredients</div>
+          <div class="pillar-desc">Only the finest — imported and local — sourced for quality and freshness.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🤲</div>
+          <div class="pillar-name">Handcrafted Daily</div>
+          <div class="pillar-desc">Every item made fresh each morning. No freezer shortcuts, ever.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🎨</div>
+          <div class="pillar-name">Artisan Recipes</div>
+          <div class="pillar-desc">Time-tested techniques refined with a modern Lagos sensibility.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">⭐</div>
+          <div class="pillar-name">Expert Bakers</div>
+          <div class="pillar-desc">Our team brings skill, passion, and precision to every creation.</div>
+        </div>
+      </div>
+      <a href="https://wa.me/2348133097788" target="_blank" class="btn-primary reveal">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-eyebrow reveal">What Customers Say</div>
+  <h2 class="section-title reveal">Lagos <em>loves</em> us</h2>
+  <div class="rating-display reveal">
+    <div class="rating-num">4.9</div>
+    <div class="rating-stars">
+      <div class="stars-row">★★★★★</div>
+      <div class="reviews-count">31+ Verified Reviews</div>
+    </div>
+  </div>
+  <div class="testimonials-track-wrap">
+    <div class="testimonials-track" id="tTrack">
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The best cinnamon rolls I've tasted in Lagos. Honestly nothing comes close — the glaze is just perfect."</p>
+        <div class="t-author">
+          <img class="t-avatar" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&q=80&fit=crop&crop=face" alt="Adaeze O." onerror="this.outerHTML='<div class=t-avatar-fallback>AO</div>'">
+          <div><div class="t-name">Adaeze O.</div><div class="t-tag">Verified Customer</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The bubble tea was absolutely amazing. Came back three times in one week. My friends are obsessed now too."</p>
+        <div class="t-author">
+          <img class="t-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80&fit=crop&crop=face" alt="Tunde K." onerror="this.outerHTML='<div class=t-avatar-fallback>TK</div>'">
+          <div><div class="t-name">Tunde K.</div><div class="t-tag">Regular Customer</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The meat pies are perfectly flaky and delicious. The cake they made for my daughter's birthday was absolutely stunning."</p>
+        <div class="t-author">
+          <img class="t-avatar" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=80&q=80&fit=crop&crop=face" alt="Funmi N." onerror="this.outerHTML='<div class=t-avatar-fallback>FN</div>'">
+          <div><div class="t-name">Funmi N.</div><div class="t-tag">Event Customer</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"Ordered a custom cake and the design exceeded every expectation. The team truly listens and delivers luxury."</p>
+        <div class="t-author">
+          <img class="t-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80&fit=crop&crop=face" alt="Chidi I." onerror="this.outerHTML='<div class=t-avatar-fallback>CI</div>'">
+          <div><div class="t-name">Chidi I.</div><div class="t-tag">Corporate Client</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The waffles! I keep coming back just for the waffles. The caramel drizzle is chef's kiss. Best in Lekki easily."</p>
+        <div class="t-author">
+          <img class="t-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80&fit=crop&crop=face" alt="Yemi A." onerror="this.outerHTML='<div class=t-avatar-fallback>YA</div>'">
+          <div><div class="t-name">Yemi A.</div><div class="t-tag">Food Enthusiast</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"What a gem in Lekki Phase 1. The atmosphere is gorgeous, the pastries are incredible. Worth every naira."</p>
+        <div class="t-author">
+          <img class="t-avatar" src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=80&q=80&fit=crop&crop=face" alt="Ngozi E." onerror="this.outerHTML='<div class=t-avatar-fallback>NE</div>'">
+          <div><div class="t-name">Ngozi E.</div><div class="t-tag">Verified Customer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="testimonials-nav" id="tNav">
+    <button class="t-dot active" onclick="goToSlide(0)"></button>
+    <button class="t-dot" onclick="goToSlide(1)"></button>
+    <button class="t-dot" onclick="goToSlide(2)"></button>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="section-eyebrow reveal">Visual Feast</div>
+  <h2 class="section-title reveal">From our <em>kitchen</em></h2>
+  <div class="gallery-grid">
+    <div class="gallery-cell tall">
+      <img src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=700&q=85&fit=crop" alt="Cinnamon Rolls" loading="lazy">
+      <div class="gallery-label">Cinnamon Rolls</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="https://images.unsplash.com/photo-1558857563-b371033873b8?w=600&q=80&fit=crop" alt="Bubble Tea" loading="lazy">
+      <div class="gallery-label">Bubble Tea</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=600&q=80&fit=crop" alt="Celebration Cakes" loading="lazy">
+      <div class="gallery-label">Celebration Cakes</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="https://images.unsplash.com/photo-1486887396153-fa416526c108?w=600&q=80&fit=crop" alt="Assorted Pastries" loading="lazy">
+      <div class="gallery-label">Artisan Pastries</div>
+    </div>
+    <div class="gallery-cell wide">
+      <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1000&q=85&fit=crop" alt="Bakery Interior" loading="lazy">
+      <div class="gallery-label">Our Bakery</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=600&q=80&fit=crop" alt="Belgian Waffles" loading="lazy">
+      <div class="gallery-label">Belgian Waffles</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=600&q=80&fit=crop" alt="Artisan Bagels" loading="lazy">
+      <div class="gallery-label">Gourmet Bagels</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80&fit=crop" alt="Luxury Cake" loading="lazy">
+      <div class="gallery-label">Luxury Cakes</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact">
+    <div class="contact-info">
+      <div class="section-eyebrow reveal">Visit Us</div>
+      <h2 class="section-title reveal">Come find <em>us</em></h2>
+      <div class="contact-block reveal">
+        <div class="contact-label">Address</div>
+        <div class="contact-value">8b Abeke Animashaun Street<br>Lekki Phase 1, Lagos</div>
+      </div>
+      <div class="contact-block reveal rd1">
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">0813 309 7788</div>
+      </div>
+      <div class="contact-block reveal rd2">
+        <div class="contact-label">Opening Hours</div>
+        <div class="contact-value">Monday – Saturday<br>8:00 AM – 6:00 PM</div>
+      </div>
+      <div class="contact-actions reveal rd3">
+        <a href="https://wa.me/2348133097788?text=Hi%2C%20I'd%20like%20to%20place%20an%20order" target="_blank" class="btn-wa">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat on WhatsApp
+        </a>
+        <a href="https://maps.google.com/?q=8b+Abeke+Animashaun+Street+Lekki+Phase+1+Lagos" target="_blank" class="btn-ghost" style="width:fit-content">Get Directions →</a>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div style="background:var(--espresso);border:1px solid rgba(200,149,108,0.15);border-radius:4px;padding:36px;margin-bottom:20px;">
+        <div class="section-eyebrow" style="margin-bottom:24px;">Send a Message</div>
+        <div class="contact-form">
+          <input type="text" placeholder="Your name" id="cfName">
+          <input type="tel" placeholder="Phone number" id="cfPhone">
+          <select id="cfItem">
+            <option value="" disabled selected>What are you ordering?</option>
+            <option>Cinnamon Rolls</option>
+            <option>Bubble Tea</option>
+            <option>Custom Celebration Cake</option>
+            <option>Gourmet Bagels</option>
+            <option>Belgian Waffles</option>
+            <option>Flaky Meat Pies</option>
+            <option>Just saying hi!</option>
+          </select>
+          <textarea placeholder="Tell us more about your order or enquiry..." id="cfMsg"></textarea>
+          <button class="btn-primary" onclick="sendWhatsApp()">Send via WhatsApp →</button>
+        </div>
+      </div>
+      <div style="aspect-ratio:16/9;border-radius:4px;overflow:hidden;border:1px solid rgba(200,149,108,0.15);">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7509!2d3.4645!3d6.4320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf53aec4a4ddd%3A0x72ac24c166185cb6!2sLekki%20Phase%201%2C%20Lagos!5e0!3m2!1sen!2sng!4v1700000000000!5m2!1sen!2sng"
+          width="100%" height="100%" style="border:0;filter:invert(90%) hue-rotate(180deg) brightness(0.85) contrast(1.1);"
+          allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">Glazes <span>&</span> Ganache</div>
+      <p class="footer-tagline">Handcrafted pastries, luxury cakes, and signature beverages — made fresh daily in Lekki, Lagos.</p>
+    </div>
+    <div class="footer-links-group">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="#">Cinnamon Rolls</a></li>
+        <li><a href="#">Bubble Tea</a></li>
+        <li><a href="#">Custom Cakes</a></li>
+        <li><a href="#">Waffles & Desserts</a></li>
+        <li><a href="#">Savory Pastries</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-group">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Find Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-group">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:08133097788">0813 309 7788</a></li>
+        <li><a href="https://wa.me/2348133097788" target="_blank">WhatsApp Order</a></li>
+        <li><a href="#">Lekki Phase 1, Lagos</a></li>
+        <li><a href="#">Mon–Sat · 8AM–6PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Glazes & Ganache. All rights reserved. Lekki, Lagos.</div>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+revealEls.forEach(el => obs.observe(el));
+
+// Nav scroll
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.style.background = window.scrollY > 60 ? 'rgba(26,8,0,0.97)' : 'linear-gradient(to bottom, rgba(26,8,0,0.95), transparent)';
+});
+
+// Testimonials slider
+let cur = 0;
+const track = document.getElementById('tTrack');
+const dots = document.querySelectorAll('.t-dot');
+function cardW() { return (track.querySelector('.testimonial-card').offsetWidth + 24) * 3; }
+function goToSlide(n) {
+  cur = n;
+  track.style.transform = `translateX(-${n * cardW()}px)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === n));
+}
+let auto = setInterval(() => goToSlide((cur + 1) % 3), 4500);
+track.addEventListener('mouseenter', () => clearInterval(auto));
+track.addEventListener('mouseleave', () => { auto = setInterval(() => goToSlide((cur + 1) % 3), 4500); });
+
+// WhatsApp form
+function sendWhatsApp() {
+  const name = document.getElementById('cfName').value;
+  const item = document.getElementById('cfItem').value;
+  const msg = document.getElementById('cfMsg').value;
+  const text = encodeURIComponent(`Hi! I'm ${name || 'a customer'}.\nInterested in: ${item || 'your menu'}\n${msg}`);
+  window.open(`https://wa.me/2348133097788?text=${text}`, '_blank');
+}
+</script>
+</body>
+</html>
